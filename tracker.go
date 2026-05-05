@@ -3,6 +3,7 @@ package tracker
 import (
 	"context"
 	"sync"
+	"testing"
 )
 
 var (
@@ -15,6 +16,22 @@ func Init(cfg Config) {
 	globalMu.Lock()
 	defer globalMu.Unlock()
 	globalClient = newClient(cfg)
+}
+
+func initWithEndpoint(cfg Config, endpoint string) {
+	globalMu.Lock()
+	defer globalMu.Unlock()
+	globalClient = newClientWithEndpoint(cfg, endpoint)
+}
+
+// InitWithEndpoint initialises the global client with an explicit endpoint URL.
+// This function is intended for use in tests only; it panics if called outside
+// of a test binary.
+func InitWithEndpoint(cfg Config, endpoint string) {
+	if !testing.Testing() {
+		panic("tracker.InitWithEndpoint must only be called from tests")
+	}
+	initWithEndpoint(cfg, endpoint)
 }
 
 func getClient() *client {

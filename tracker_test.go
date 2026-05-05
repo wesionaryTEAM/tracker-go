@@ -53,7 +53,7 @@ func flush(t *testing.T) {
 
 func TestCaptureError_PostsCorrectPayload(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "test-key", Endpoint: srv.URL, Environment: "test"})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "test-key", Environment: "test"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	tracker.CaptureError(errors.New("something broke"))
@@ -82,7 +82,7 @@ func TestCaptureError_PostsCorrectPayload(t *testing.T) {
 
 func TestCaptureError_IncludesStackTrace(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	tracker.CaptureError(errors.New("trace test"))
@@ -100,7 +100,7 @@ func TestCaptureError_IncludesStackTrace(t *testing.T) {
 
 func TestCaptureError_WithExtraContext(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	tracker.CaptureError(errors.New("ctx test"), map[string]any{"method": "GET", "status": 500})
@@ -114,7 +114,7 @@ func TestCaptureError_WithExtraContext(t *testing.T) {
 
 func TestCaptureMessage_SetsType(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	tracker.CaptureMessage("hello world", tracker.LevelWarn)
@@ -131,7 +131,7 @@ func TestCaptureMessage_SetsType(t *testing.T) {
 
 func TestSetUser_AttachesToPayload(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	tracker.SetUser(&tracker.UserContext{ID: "u1", Email: "a@b.com", Name: "Alice"})
@@ -149,7 +149,7 @@ func TestSetUser_AttachesToPayload(t *testing.T) {
 
 func TestSetUser_ClearsWithNil(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	tracker.SetUser(&tracker.UserContext{ID: "u1"})
@@ -165,7 +165,7 @@ func TestSetUser_ClearsWithNil(t *testing.T) {
 
 func TestAddBreadcrumb_AttachesToPayload(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	tracker.AddBreadcrumb(tracker.Breadcrumb{Message: "clicked button", Category: "ui"})
@@ -183,7 +183,7 @@ func TestAddBreadcrumb_AttachesToPayload(t *testing.T) {
 
 func TestWithContext_AttachesToCustom(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	tracker.WithContext("requestId", "req-123")
@@ -198,7 +198,7 @@ func TestWithContext_AttachesToCustom(t *testing.T) {
 
 func TestRecover_CapturesPanicAndRepanics(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	// outer recover prevents the test itself from crashing
@@ -224,7 +224,7 @@ func TestFlush_ReturnsOnContextCancel(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	tracker.CaptureError(errors.New("slow"))

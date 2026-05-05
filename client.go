@@ -41,10 +41,6 @@ type client struct {
 }
 
 func newClient(cfg Config) *client {
-	ep := cfg.Endpoint
-	if ep == "" {
-		ep = defaultEndpoint
-	}
 	env := cfg.Environment
 	if env == "" {
 		env = defaultEnvironment
@@ -52,7 +48,7 @@ func newClient(cfg Config) *client {
 	return &client{
 		cfg: resolvedConfig{
 			apiKey:      cfg.APIKey,
-			endpoint:    ep,
+			endpoint:    defaultEndpoint,
 			environment: env,
 			release:     cfg.Release,
 			debug:       cfg.Debug,
@@ -62,6 +58,12 @@ func newClient(cfg Config) *client {
 		sessionID: uuid.New().String(),
 		http:      &http.Client{Timeout: 10 * time.Second},
 	}
+}
+
+func newClientWithEndpoint(cfg Config, endpoint string) *client {
+	c := newClient(cfg)
+	c.cfg.endpoint = endpoint
+	return c
 }
 
 func (c *client) setUser(u *UserContext) {

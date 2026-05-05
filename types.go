@@ -12,7 +12,6 @@ const (
 // Config holds the options passed to Init.
 type Config struct {
 	APIKey      string // required
-	Endpoint    string // default: "http://localhost:9090/errors"
 	Environment string // default: "production"
 	Release     string // optional git SHA or version tag
 	Debug       bool   // log to stdout when true

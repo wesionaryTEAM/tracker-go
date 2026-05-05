@@ -45,7 +45,7 @@ func wait(t *testing.T, ch chan tracker.ErrorPayload) tracker.ErrorPayload {
 
 func TestMiddleware_CapturesPanic(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	router := gin.New()
@@ -78,7 +78,7 @@ func TestMiddleware_CapturesPanic(t *testing.T) {
 
 func TestMiddleware_CapturesGinErrors(t *testing.T) {
 	srv, ch := capturePayload(t)
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: srv.URL})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, srv.URL)
 	t.Cleanup(tracker.Reset)
 
 	router := gin.New()
@@ -104,7 +104,7 @@ func TestMiddleware_CapturesGinErrors(t *testing.T) {
 
 func TestMiddleware_PassesThrough_NoError(t *testing.T) {
 	// No ingest server needed — any unexpected POST would fail to connect.
-	tracker.Init(tracker.Config{APIKey: "k", Endpoint: "http://127.0.0.1:1"})
+	tracker.InitWithEndpoint(tracker.Config{APIKey: "k"}, "http://127.0.0.1:1")
 	t.Cleanup(tracker.Reset)
 
 	router := gin.New()
