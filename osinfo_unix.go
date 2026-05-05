@@ -2,21 +2,17 @@
 
 package tracker
 
-import "syscall"
+import (
+	"os/exec"
+	"strings"
+)
 
-// osVersion returns the OS kernel release string on Linux and macOS.
-// Returns "" if syscall.Uname fails.
+// osVersion returns the OS kernel release string via `uname -r`.
+// Returns "" if the command fails.
 func osVersion() string {
-	var uname syscall.Utsname
-	if err := syscall.Uname(&uname); err != nil {
+	out, err := exec.Command("uname", "-r").Output()
+	if err != nil {
 		return ""
 	}
-	b := make([]byte, 0, len(uname.Release))
-	for _, v := range uname.Release {
-		if v == 0 {
-			break
-		}
-		b = append(b, byte(v))
-	}
-	return string(b)
+	return strings.TrimSpace(string(out))
 }
