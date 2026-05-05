@@ -220,7 +220,7 @@ func TestRecover_CapturesPanicAndRepanics(t *testing.T) {
 func TestFlush_ReturnsOnContextCancel(t *testing.T) {
 	// Server that never responds — ensures Flush respects ctx cancellation.
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(10 * time.Second)
+		time.Sleep(200 * time.Millisecond)
 	}))
 	defer srv.Close()
 

@@ -57,6 +57,7 @@ func newClient(cfg Config) *client {
 			release:     cfg.Release,
 			debug:       cfg.Debug,
 		},
+		crumbs:    []Breadcrumb{},
 		customCtx: make(map[string]any),
 		sessionID: uuid.New().String(),
 		http:      &http.Client{Timeout: 10 * time.Second},
@@ -77,7 +78,9 @@ func (c *client) addBreadcrumb(b Breadcrumb) {
 	}
 	c.crumbs = append(c.crumbs, b)
 	if len(c.crumbs) > maxBreadcrumbs {
-		c.crumbs = c.crumbs[len(c.crumbs)-maxBreadcrumbs:]
+		trimmed := make([]Breadcrumb, maxBreadcrumbs)
+		copy(trimmed, c.crumbs[len(c.crumbs)-maxBreadcrumbs:])
+		c.crumbs = trimmed
 	}
 }
 
