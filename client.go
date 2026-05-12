@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	defaultEndpoint    = "http://localhost:9090/errors"
+	defaultEndpoint    = "https://wtracker.manjish.com/errors/ingest"
 	defaultEnvironment = "production"
 	maxBreadcrumbs     = 20
 )
@@ -171,13 +171,21 @@ func (c *client) send(p ErrorPayload) {
 			c.logf("marshal error: %v", err)
 			return
 		}
-		resp, err := c.http.Post(c.cfg.endpoint, "application/json", bytes.NewReader(data))
+		req, err := http.NewRequest(http.MethodPost, c.cfg.endpoint, bytes.NewReader(data))
+		if err != nil {
+			c.logf("request error: %v", err)
+			return
+		}
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+c.cfg.apiKey)
+		resp, err := c.http.Do(req)
 		if err != nil {
 			c.logf("send error: %v", err)
 			return
 		}
 		defer resp.Body.Close()
 		io.Copy(io.Discard, resp.Body) //nolint:errcheck
+		c.logf("sent: status %d", resp.StatusCode)
 	}()
 }
 
