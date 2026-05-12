@@ -1,4 +1,4 @@
-module github.com/wesionary-team/tracker-go
+module github.com/wesionaryteam/tracker-go
 
 go 1.25.4
 

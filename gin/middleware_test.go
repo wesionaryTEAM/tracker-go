@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	tracker "github.com/wesionary-team/tracker-go"
-	trackergin "github.com/wesionary-team/tracker-go/gin"
+	tracker "github.com/wesionaryteam/tracker-go"
+	trackergin "github.com/wesionaryteam/tracker-go/gin"
 )
 
 func init() {

@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	tracker "github.com/wesionary-team/tracker-go"
+	tracker "github.com/wesionaryteam/tracker-go"
 )
 
 // capturePayload starts an httptest.Server that decodes the first payload
