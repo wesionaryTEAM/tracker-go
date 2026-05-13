@@ -1,5 +1,5 @@
-// Package trackergin provides a Gin middleware for @wesionaryteam/tracker.
-// Import path: github.com/wesionaryteam/tracker-go/gin
+// Package trackergin provides a Gin middleware for @wesionaryTEAM/tracker.
+// Import path: github.com/wesionaryTEAM/tracker-go/gin
 package trackergin
 
 import (
@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	tracker "github.com/wesionaryteam/tracker-go"
+	tracker "github.com/wesionaryTEAM/tracker-go"
 )
 
 // Middleware returns a gin.HandlerFunc that captures panics and gin errors.
